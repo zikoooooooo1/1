@@ -108,7 +108,7 @@ async def generate(locale,data,tmp,captions_only=False):
     audio=tmp/(locale+'.wav')
     run('ffmpeg','-v','error','-y','-f','concat','-safe','0','-i',concat,'-c','copy',audio)
     dest=tmp/f'tour-{locale}.mp4'
-    command=['ffmpeg','-v','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','pipe:0','-i',str(audio),'-c:v','libopenh264','-coder','cabac','-profile:v','high','-b:v','4000k','-qmin','10','-qmax','18','-g','60','-pix_fmt','yuv420p','-c:a','aac','-b:a','96k','-movflags','+faststart','-shortest',str(dest)]
+    command=['ffmpeg','-v','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','pipe:0','-i',str(audio),'-c:v','libopenh264','-coder','cabac','-profile:v','high','-rc_mode','bitrate','-b:v','350k','-qmin','18','-qmax','30','-g','60','-pix_fmt','yuv420p','-c:a','aac','-b:a','96k','-movflags','+faststart','-shortest',str(dest)]
     encoder=subprocess.Popen(command,stdin=subprocess.PIPE)
     previous=None
     try:
