@@ -1,4 +1,5 @@
 export const homeMessages: Record<string, [string, string]> = {
+  film_language: ['Narration language', 'لغة التعليق الصوتي'],
   home: ['Home', 'الرئيسية'],
   home_platform: ['The platform', 'المنصة'],
   home_workspaces: ['Workspaces', 'مساحات العمل'],

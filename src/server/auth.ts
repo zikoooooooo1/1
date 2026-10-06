@@ -8,7 +8,8 @@ const scrypt = promisify(scryptCallback);
 export type User = {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
+  teacher_setup_required?: number;
   role: Role;
   must_change_password: number;
 };
@@ -89,7 +90,7 @@ export function authenticate(db: Store) {
     const row =
       token &&
       db.get(
-        "SELECT u.id,u.name,u.email,u.role,u.must_change_password,u.auth_provider,s.auth_provider session_provider,s.csrf FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND u.status='active'",
+        "SELECT u.id,u.name,u.email,u.role,u.must_change_password,u.teacher_setup_required,u.auth_provider,s.auth_provider session_provider,s.csrf FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND u.status='active'",
         digest(token),
         now(),
       );
@@ -107,6 +108,12 @@ export function authenticate(db: Store) {
       !['/auth/me', '/auth/password', '/auth/logout'].includes(req.path)
     )
       return next(new AppError(403, 'password_change_required'));
+    if (
+      row.role === 'teacher' &&
+      row.teacher_setup_required &&
+      !['/auth/me', '/auth/password', '/auth/logout', '/teaching-setup'].includes(req.path)
+    )
+      return next(new AppError(403, 'teacher_setup_required'));
     next();
   };
 }

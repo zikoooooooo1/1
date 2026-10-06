@@ -1,8 +1,7 @@
 """Deterministic, localized UI choreography for the narrated product story."""
 from functools import lru_cache
 from pathlib import Path
-import math
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parents[2]
 W, H, FPS = 1280, 720, 30
@@ -204,10 +203,58 @@ class Scene:
         self.label('brand_line',90,654,1100,size=32,color='white',bold=True,center=True)
 
 
+_MONTAGE_CACHE = {}
+
+def editorial_montage(locale, ui, logo, t, duration):
+    """A four-shot recap of the same object, with readable labels and motivated cuts."""
+    key=(locale, tuple(sorted(ui.items())))
+    if key not in _MONTAGE_CACHE:
+        tiles=[]
+        for cue, label, role, chapter in [('connect','setup_title','admin',0),('publish','publish_title','teacher',1),('submit','submit_title','student',2),('result','return_title','student',3)]:
+            scene=Scene(locale,ui,logo)
+            shot=scene.render(cue,ui[label],3.3,7,chapter)
+            # Show the academic work, excluding duplicate headers and outer navigation.
+            crop=shot.crop((64,183,1216,615)).resize((535,201),Image.Resampling.LANCZOS)
+            tiles.append((crop,ui[label],ui[role]))
+        _MONTAGE_CACHE[key]=tiles
+    scene=Scene(locale,ui,logo)
+    scene.header(ui['same_work'],3)
+    active=min(3,int(max(0,t-.25)/1.25))
+    for i,(tile,title,role) in enumerate(_MONTAGE_CACHE[key]):
+        x=70+(i%2)*595; y=193+(i//2)*241
+        amount=ease((t-i*.17)/.5)
+        y+=int((1-amount)*18)
+        scene.box(x-5,y-5,545,211,'#272c42',PURPLE if i==active else '#3b4157',r=8,width=3 if i==active else 1)
+        actual=W-x-535 if scene.ar else x
+        scene.image.alpha_composite(tile,(actual,y))
+        scene.text(f'{i+1:02}  {title}',x,y+221,535,size=20,color='white',bold=i==active)
+    # End on a clean brand lockup, fading from the completed montage.
+    if t>duration-2.3:
+        ending=Scene(locale,ui,logo)
+        ending.image.alpha_composite(logo.resize((80,80)),(600,207))
+        ending.text('CLASO',140,348,1000,size=76,color='white',bold=True,center=True)
+        ending.label('brand_line',140,429,1000,size=36,color='#c5c9dd',center=True)
+        scene.image=Image.blend(scene.image,ending.image,ease((t-duration+2.3)/.65))
+    return scene.image
+
 def frame(locale,ui,logo,cue,title,t,duration,chapter,previous=None):
     shot=Scene(locale,ui,logo).render(cue,title,t,duration,chapter)
-    # Keep the class/assignment in the same position across role changes.
-    # Cross-dissolves reveal a new state, rather than shuffling unrelated cards.
-    if previous is not None and t<.32:
+    if locale=='en':
+        if cue=='outro':
+            shot=editorial_montage(locale,ui,logo,t,duration)
+        elif cue not in ['intro','setup']:
+            # Gentle camera movement adds emphasis without moving the assignment off screen.
+            zoom=1+.025*ease(t/.8)
+            zw,zh=round(W*zoom),round(H*zoom)
+            shot=shot.resize((zw,zh),Image.Resampling.BICUBIC).crop(((zw-W)//2,(zh-H)//2,(zw+W)//2,(zh+H)//2))
+        if previous is not None and t<.28:
+            # A brief directional match-cut reveals the next state in the same workspace.
+            edge=round(W*ease(t/.28))
+            composite=previous.copy()
+            composite.paste(shot.crop((0,0,edge,H)),(0,0))
+            if edge<W:
+                ImageDraw.Draw(composite).rectangle((edge,0,min(W,edge+4),H),fill='#8d80ef')
+            shot=composite
+    elif previous is not None and t<.32:
         shot=Image.blend(previous,shot,ease(t/.32))
     return shot.convert('RGB')

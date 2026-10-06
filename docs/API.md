@@ -37,3 +37,14 @@ Teacher onboarding: administrator-only `GET /teaching-classes?q=...&page=...` re
 `POST /people/:id/role` is admin-only and requires `{role,version,current_password}`. It checks active-account/history rules, prevents self-demotion, invalidates target sessions and records old/new roles. `POST /people/microsoft` is admin-only, taking `{name,email,object_id}` against the configured school tenant; Microsoft callback authentication can only resolve a previously created identity. Local `POST /people` and CSV imports support all four roles. All identity mutations/export remain admin-only.
 
 School setup: `/dashboard` returns `setup` only for administrators and school management (null for teachers/students). `/control-center` returns the same typed `readiness` object: `steps`, `completed`, `total`, `activeClasses`, `connectedClasses`, `scheduledClasses`. Step metadata includes localized-copy keys, completion, destination and optional `administratorOnly`. These flags guide navigation; backend role enforcement on each destination remains authoritative. Coverage excludes archived years/classes/accounts and requires every active current-year class to have an active teacher, an active enrolled student, and a schedule entry for the respective steps.
+
+## School roster and teaching setup
+
+- `GET /rosters`: administrator-only batch counts and available academic context.
+- `POST /rosters/:id/activate`: administrator selects `{year_id, term_id}`; both must refer to an active, valid academic context.
+- `POST /rosters/:id/teacher-credentials`: administrator reauthentication with `{current_password}`; private credential handoff, audited and no-store.
+- `GET /teaching-setup`: provisioned teacher's active roster groups/counts and subjects; contains no student identities.
+- `POST /teaching-setup`: `{batch_id, selections: [{subject_id, group_ids}]}`. Required once for imported/new unconfigured teachers. Atomic and idempotent; server verifies roles, active batch, subjects and every group.
+- `GET /classes/:id/roster?q=&page=&limit=`: assigned teacher or school operator; paginated student identifiers and bilingual names only. Students cannot access this directory.
+
+Pending teaching setup is enforced by authentication middleware, allowing only password change, session/logout and teaching-setup endpoints until completion. Private operational imports are described in [School roster](SCHOOL_ROSTER.md).

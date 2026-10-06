@@ -62,7 +62,17 @@ export function accountsRouter(db: Store) {
           );
         }
       }
-      updateVersion(db, 'users', uid, data.version, { role: data.role });
+      if (data.role === 'teacher' && target.role !== 'teacher')
+        db.run('DELETE FROM teaching_setup_completions WHERE teacher_id=?', uid);
+      updateVersion(db, 'users', uid, data.version, {
+        role: data.role,
+        teacher_setup_required:
+          data.role === 'teacher'
+            ? target.role === 'teacher'
+              ? target.teacher_setup_required
+              : 1
+            : 0,
+      });
       db.run('DELETE FROM sessions WHERE user_id=?', uid);
       db.audit(
         req.user.id,

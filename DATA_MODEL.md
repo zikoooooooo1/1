@@ -72,3 +72,7 @@ Migration `003_school_identity.sql` adds a unique optional administrator `login_
 ## School management
 
 Migration `004_school_management.sql` adds the `school_management` role and records separate academic, system, account-role and academic-audit capabilities. Existing user rows, credentials and memberships are unchanged. Only administrators create identities and update account roles. Role transitions preserve history, use account versions, revoke sessions and record actor/old/new roles in audit events.
+
+## School roster
+
+`roster_batches` records a private import and its pending/active academic context. `roster_groups` links each supplied section code to grade/section/track, and `roster_memberships` assigns one group per student/batch. `roster_classes` maps each subject/group pair to a single class; `teaching_setup_completions` stores a teacher's one-time completed class allocation. Users may have no contact email and sign in through their unique `login_id`; imported students also retain `student_number`, `name_ar` and `name_en`. See [School roster](docs/SCHOOL_ROSTER.md).

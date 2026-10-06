@@ -1,0 +1,141 @@
+.teaching-setup-page {
+  min-height: 100dvh;
+  background: var(--bg);
+  padding: 24px;
+}
+.teaching-setup-header {
+  max-width: 1040px;
+  margin: 0 auto 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.teaching-setup-header > div {
+  display: flex;
+  gap: 8px;
+}
+.teaching-setup-card {
+  max-width: 960px;
+  margin: auto;
+  padding: clamp(20px, 4vw, 48px);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.teaching-setup-card h1 {
+  margin-block: 12px;
+}
+.setup-progress {
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-block: 32px;
+}
+.setup-progress li {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  border-block-start: 2px solid var(--line);
+  padding-block-start: 12px;
+}
+.setup-progress li[aria-current] {
+  color: var(--indigo);
+  border-color: var(--indigo);
+  font-weight: 600;
+}
+.setup-progress li > span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+}
+.setup-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.setup-choice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.setup-choice:has(input:checked) {
+  border-color: var(--indigo);
+  background: var(--indigo-soft);
+}
+.setup-choice input,
+.setup-confirm input {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--indigo);
+}
+.setup-choice strong,
+.setup-choice small {
+  display: block;
+}
+.setup-choice small {
+  color: var(--muted);
+  margin-block-start: 4px;
+}
+.setup-subject {
+  margin-block: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.setup-subject legend {
+  padding-inline: 8px;
+  font-weight: 700;
+}
+.setup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-block-start: 32px;
+  padding-block-start: 20px;
+  border-block-start: 1px solid var(--line);
+}
+.setup-confirm {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.setup-group-chip {
+  display: inline-block;
+  padding: 6px 10px;
+  margin-inline-end: 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.setup-waiting {
+  padding-block: 36px;
+}
+@media (max-width: 600px) {
+  .teaching-setup-page {
+    padding: 12px;
+  }
+  .setup-choice-grid {
+    grid-template-columns: 1fr;
+  }
+  .setup-progress {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .setup-subject {
+    padding: 12px;
+  }
+  .setup-actions {
+    flex-wrap: wrap;
+  }
+}

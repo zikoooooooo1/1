@@ -22,11 +22,21 @@ export class Store {
     for (const file of readdirSync(resolve('migrations'))
       .filter((f) => f.endsWith('.sql'))
       .sort()) {
-      if (!this.get('SELECT version FROM migrations WHERE version=?', file))
-        this.transaction(() => {
-          this.db.exec(readFileSync(resolve('migrations', file), 'utf8'));
-          this.run('INSERT INTO migrations VALUES (?,?)', file, now());
-        });
+      if (!this.get('SELECT version FROM migrations WHERE version=?', file)) {
+        const sql = readFileSync(resolve('migrations', file), 'utf8');
+        const rebuild = sql.startsWith('-- claso:rebuild-foreign-keys\n');
+        if (rebuild) this.db.exec('PRAGMA foreign_keys=OFF');
+        try {
+          this.transaction(() => {
+            this.db.exec(sql);
+            if (this.db.prepare('PRAGMA foreign_key_check').all().length)
+              throw new Error('Migration would violate foreign keys');
+            this.run('INSERT INTO migrations VALUES (?,?)', file, now());
+          });
+        } finally {
+          if (rebuild) this.db.exec('PRAGMA foreign_keys=ON');
+        }
+      }
     }
   }
   all(sql: string, ...params: Param[]): Row[] {

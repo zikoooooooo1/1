@@ -91,20 +91,21 @@ export function peopleRouter(db: Store) {
     if (req.query.status === 'archived' && isSchoolOperator(user))
       where = where.replace("u.status='active'", "u.status='archived'");
     if (req.query.q) {
-      where += " AND (u.name LIKE ? ESCAPE '\\' OR u.email LIKE ? ESCAPE '\\')";
+      where +=
+        " AND (u.name LIKE ? ESCAPE '\\' OR u.email LIKE ? ESCAPE '\\' OR u.login_id LIKE ? ESCAPE '\\' OR u.name_ar LIKE ? ESCAPE '\\')";
       const q =
         '%' +
         String(req.query.q)
           .slice(0, 100)
           .replace(/[\\%_]/g, '\\$&') +
         '%';
-      params.push(q, q);
+      params.push(q, q, q, q);
     }
     const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 25)),
       page = Math.max(1, Number(req.query.page) || 1);
     const total = db.get(`SELECT count(*) total FROM users u WHERE ${where}`, ...params)!.total;
     const items = db.all(
-      `SELECT u.id,u.name,${isSchoolOperator(user) ? 'u.email,u.auth_provider,' : ''}u.role,u.status,u.created_at,u.version FROM users u WHERE ${where} ORDER BY u.name,u.id LIMIT ? OFFSET ?`,
+      `SELECT u.id,u.name,u.name_ar,u.name_en,u.student_number,u.login_id,${isSchoolOperator(user) ? 'u.email,u.auth_provider,' : ''}u.role,u.status,u.created_at,u.version FROM users u WHERE ${where} ORDER BY u.name,u.id LIMIT ? OFFSET ?`,
       ...params,
       limit,
       (page - 1) * limit,
@@ -123,6 +124,7 @@ export function peopleRouter(db: Store) {
         name: data.name,
         email: data.email,
         role: data.role,
+        teacher_setup_required: data.role === 'teacher' ? 1 : 0,
         password_hash: hash,
         must_change_password: 1,
         created_at: now(),
@@ -136,14 +138,16 @@ export function peopleRouter(db: Store) {
     const data = z
       .object({
         name: z.string().trim().min(1).max(200),
-        email: z.email().max(254),
+        email: z
+          .union([z.email().max(254), z.literal(''), z.null()])
+          .transform((v) => v?.toLowerCase() || null),
         version: z.number().int().positive(),
       })
       .parse(req.body);
     db.transaction(() => {
       updateVersion(db, 'users', String(req.params.id), data.version, {
         name: data.name,
-        email: data.email.toLowerCase(),
+        email: data.email,
       });
       db.audit(req.user.id, 'update', 'users', String(req.params.id), {}, req.requestId);
     });
@@ -208,8 +212,10 @@ export function peopleRouter(db: Store) {
   router.get('/people/export', (req, res) => {
     requireRole(req.user, 'admin');
     const rows = db.all('SELECT name,email,role,status FROM users ORDER BY name');
-    const cell = (v: string) =>
-      '"' + (/^[=+\-@\t\r]/.test(v) ? "'" : '') + v.replace(/"/g, '""') + '"';
+    const cell = (value: string | null) => {
+      const v = value || '';
+      return '"' + (/^[=+\-@\t\r]/.test(v) ? "'" : '') + v.replace(/"/g, '""') + '"';
+    };
     res
       .type('text/csv')
       .attachment('claso-people.csv')

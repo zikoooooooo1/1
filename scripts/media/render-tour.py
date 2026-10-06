@@ -108,7 +108,7 @@ async def generate(locale,data,tmp,captions_only=False):
     audio=tmp/(locale+'.wav')
     run('ffmpeg','-v','error','-y','-f','concat','-safe','0','-i',concat,'-c','copy',audio)
     dest=tmp/f'tour-{locale}.mp4'
-    command=['ffmpeg','-v','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','pipe:0','-i',str(audio),'-c:v','libopenh264','-b:v','4000k','-qmin','10','-qmax','18','-g','60','-pix_fmt','yuv420p','-c:a','aac','-b:a','96k','-movflags','+faststart','-shortest',str(dest)]
+    command=['ffmpeg','-v','error','-y','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','pipe:0','-i',str(audio),'-c:v','libopenh264','-coder','cabac','-profile:v','high','-b:v','4000k','-qmin','10','-qmax','18','-g','60','-pix_fmt','yuv420p','-c:a','aac','-b:a','96k','-movflags','+faststart','-shortest',str(dest)]
     encoder=subprocess.Popen(command,stdin=subprocess.PIPE)
     previous=None
     try:
@@ -137,6 +137,7 @@ async def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--preview',type=Path,help='Render a contact sheet without synthesizing narration')
     parser.add_argument('--captions-only',action='store_true',help='Refresh captions only when narration and chapter timing still match the rendered film')
+    parser.add_argument('--locale',choices=['en','ar'],help='Render one language while preserving the other variant')
     args=parser.parse_args()
     OUTPUT.mkdir(parents=True,exist_ok=True)
     CACHE.mkdir(parents=True,exist_ok=True)
@@ -145,11 +146,12 @@ async def main():
         if args.preview:
             preview(args.preview,tmp)
             return
-        metadata={}
-        for locale,data in CONTENT.items():
+        locales={args.locale:CONTENT[args.locale]} if args.locale else CONTENT
+        metadata=json.loads((ROOT/'src/shared/tour-timeline.json').read_text()) if args.locale else {}
+        for locale,data in locales.items():
             metadata[locale]=await generate(locale,data,tmp,args.captions_only)
         # Only publish after all language variants and codecs have rendered successfully.
-        for locale in CONTENT:
+        for locale in locales:
             for suffix in (['.vtt'] if args.captions_only else ['.mp4','.webm','.vtt','-poster.jpg']):
                 name=f'tour-{locale}{suffix}'
                 staged=OUTPUT/('.'+name+'.tmp')

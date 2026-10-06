@@ -1,3 +1,4 @@
+import { teachingSetupRouter } from './teaching-setup.js';
 import { accountsRouter } from './accounts.js';
 import { controlRouter } from './control.js';
 import { teachersRouter } from './teachers.js';
@@ -150,6 +151,7 @@ export async function createApp(db: Store, options: { storage?: string; frontend
     accountsRouter(db),
     controlRouter(db),
     teachersRouter(db),
+    teachingSetupRouter(db),
     academicRouter(db),
     assessmentRouter(db),
     fileRouter(db, storage),

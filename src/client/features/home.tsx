@@ -22,6 +22,7 @@ const nodes = [Layers3, Users, BookOpen, ChartNoAxesCombined];
 const nodeKeys = ['home_structure', 'home_people', 'home_learning', 'home_history'];
 export default function Home({ signedIn }: { signedIn: boolean }) {
   const { locale, setLocale, t } = useLocale();
+  const [filmLocale, setFilmLocale] = useState<'en' | 'ar'>('en');
   const video = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
   const [chapter, setChapter] = useState('');
@@ -39,7 +40,7 @@ export default function Home({ signedIn }: { signedIn: boolean }) {
     setFailed(false);
     setChapter('');
     pendingSeek.current = null;
-  }, [locale]);
+  }, [filmLocale]);
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,9 +65,9 @@ export default function Home({ signedIn }: { signedIn: boolean }) {
       /* Native controls remain available to retry playback. */
     });
   };
-  const film = tour[locale];
-  const timing = timeline[locale];
-  const media = (suffix: string) => `/media/tour-${locale}${suffix}?v=${timing.revision}`;
+  const film = tour[filmLocale];
+  const timing = timeline[filmLocale];
+  const media = (suffix: string) => `/media/tour-${filmLocale}${suffix}?v=${timing.revision}`;
   const seek = (seconds: number) => {
     const player = video.current;
     if (!player) return;
@@ -261,7 +262,7 @@ export default function Home({ signedIn }: { signedIn: boolean }) {
             </div>
             <div className="home-film-frame">
               <video
-                key={locale}
+                key={filmLocale}
                 ref={video}
                 controls
                 playsInline
@@ -289,12 +290,22 @@ export default function Home({ signedIn }: { signedIn: boolean }) {
                 <track
                   kind="captions"
                   src={media('.vtt')}
-                  srcLang={locale}
-                  label={locale === 'ar' ? 'العربية' : 'English'}
+                  srcLang={filmLocale}
+                  label={filmLocale === 'ar' ? 'العربية' : 'English'}
                 />
                 {t('home_video_fallback')}
               </video>
             </div>
+            <label className="film-language">
+              {t('film_language')}
+              <select
+                value={filmLocale}
+                onChange={(event) => setFilmLocale(event.target.value as 'en' | 'ar')}
+              >
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+              </select>
+            </label>
             <nav className="film-chapters" aria-label={t('home_chapters')}>
               {timing.chapters.map((item, index) => (
                 <button

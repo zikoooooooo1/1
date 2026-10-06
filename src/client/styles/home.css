@@ -733,3 +733,16 @@
     padding: 12px;
   }
 }
+
+.film-language {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  padding-block: 16px;
+  color: var(--muted);
+}
+.film-language select {
+  width: auto;
+  min-width: 140px;
+}

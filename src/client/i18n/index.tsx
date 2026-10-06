@@ -1,7 +1,9 @@
+import { teachingMessages } from './teaching';
 import { homeMessages } from './home';
 import React, { createContext, useContext, useState } from 'react';
 const messages: Record<string, [string, string]> = {
   ...homeMessages,
+  ...teachingMessages,
   count: ['Count', 'العدد'],
   school_management: ['School management', 'إدارة المدرسة'],
   control_center: ['Control center', 'مركز التحكم'],

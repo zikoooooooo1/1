@@ -1,3 +1,4 @@
+import { ClassRoster } from './rosters';
 import { isSchoolOperator, type Role } from '../../shared/roles';
 import { RoleChange, MicrosoftAccount } from './accounts';
 import { TeacherOnboarding } from './teachers';
@@ -23,7 +24,8 @@ import {
 export type User = {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
+  teacher_setup_required?: number;
   role: Role;
   must_change_password: number;
   auth_provider?: 'password' | 'microsoft';
@@ -453,7 +455,7 @@ export function People({ user }: { user: User }) {
               rows={data.data.items}
               columns={
                 isSchoolOperator(user)
-                  ? ['name', 'email', 'role', 'status']
+                  ? ['name', 'login_id', 'email', 'role', 'status']
                   : ['name', 'role', 'status']
               }
               onRow={user.role === 'admin' ? setEditing : undefined}
@@ -494,7 +496,9 @@ export function People({ user }: { user: User }) {
           <Form
             fields={
               editing.id
-                ? personFields.filter((f) => ['name', 'email'].includes(f.key))
+                ? personFields
+                    .filter((f) => ['name', 'email'].includes(f.key))
+                    .map((f) => (f.key === 'email' ? { ...f, required: false } : f))
                 : personFields
             }
             initial={editing}
@@ -638,6 +642,8 @@ export function ClassWorkspace({ id, user }: { id: string; user: User }) {
             ))}
           </div>
         </div>
+      ) : tab === 'enrollments' && user.role === 'teacher' ? (
+        <ClassRoster classId={id} />
       ) : (
         <Records
           entity={tab}

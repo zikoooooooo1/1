@@ -1,3 +1,4 @@
+import { RosterManagement } from './rosters';
 import { SchoolReadiness } from '../components/school-readiness';
 import {
   Users,
@@ -78,6 +79,7 @@ export function ControlCenter({ user }: { user: User }) {
         </bdi>
       </p>
       <SchoolReadiness data={data.readiness} administrator={admin} />
+      {admin && <RosterManagement />}
       <div className="control-metrics">
         {metrics.map(([key, count, path]) => (
           <button key={key} className="metric panel" onClick={() => navigate(path)}>

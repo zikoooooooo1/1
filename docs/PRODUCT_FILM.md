@@ -34,3 +34,7 @@ Use `--captions-only` to regenerate captions from cached narration without encod
 Playback assets are written to `public/media/` and chapter metadata to `src/shared/tour-timeline.json`; commit both with their source. Production installation does not require Python, FFmpeg, speech credentials or speech-provider access. Synthetic narration is identified on the home page.
 
 On Amazon Linux, FFmpeg 5.1 may specifically load `libopenh264.so.7`. The available OS package supplies `.so.8` and is insufficient for that build. Use the matching Cisco OpenH264 2.3.1 binary in a private library directory with `LD_LIBRARY_PATH`, or a compatible FFmpeg build. Do not rename a different ABI version. This requirement applies only to media authoring.
+
+## English editorial cut
+
+The home player starts with English narration independently of the interface language. A separate narration selector retains the Arabic version. The English cut uses short directional match cuts, restrained camera moves around the persistent assignment and a four-shot closing montage followed by the brand lockup. These illustrations contain no imported school identities. To re-render only this version while preserving Arabic assets, use `--locale en`; chapter metadata for the other language is retained.

@@ -60,6 +60,8 @@ before(async () => {
   ]) {
     await post(admin, '/people', { role, email, name, password });
   }
+  // This suite exercises an already configured teacher; first-login setup has its own HTTP suite.
+  db.run("UPDATE users SET teacher_setup_required=0 WHERE role='teacher'");
   manager = await login('manager@school.example');
   teacher = await login('teacher@school.example');
   student = await login('student@school.example');
@@ -360,6 +362,8 @@ test('administrator archives/restores school management and imports the role; no
   await post(admin, `/people/${manager.id}/archive`, { version }, 200);
   await manager.agent.get('/api/control-center').expect(401);
   await post(admin, `/people/${manager.id}/restore`, { version: version + 1 }, 200);
+  // This suite exercises an already configured teacher; first-login setup has its own HTTP suite.
+  db.run("UPDATE users SET teacher_setup_required=0 WHERE role='teacher'");
   manager = await login('manager@school.example');
   await manager.agent.get('/api/control-center').expect(200);
   const preview = (

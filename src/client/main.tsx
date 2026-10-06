@@ -36,6 +36,9 @@ import { Form, ErrorBox, Loading, Modal, Empty } from './components/ui';
 import type { User } from './features/records';
 
 import './styles/global.css';
+const TeachingSetup = lazy(() =>
+  import('./features/teaching-setup').then((m) => ({ default: m.TeachingSetup })),
+);
 const Home = lazy(() => import('./features/home'));
 const Records = lazy(() => import('./features/records').then((m) => ({ default: m.Records })));
 const Academic = lazy(() => import('./features/records').then((m) => ({ default: m.Academic })));
@@ -210,7 +213,8 @@ function App() {
       const session = await api('/auth/me');
       setCsrf(session.csrf);
       setUser(session.user);
-      if (!session.user.must_change_password) setSchool(await api('/school'));
+      if (!session.user.must_change_password && !session.user.teacher_setup_required)
+        setSchool(await api('/school'));
     } catch (e: any) {
       if (e.status !== 401) setError(e);
       setUser(null);
@@ -253,6 +257,21 @@ function App() {
         />
       ) : user.must_change_password ? (
         <PasswordChange onDone={load} />
+      ) : user.role === 'teacher' && user.teacher_setup_required ? (
+        <Suspense fallback={<Loading />}>
+          <TeachingSetup
+            onDone={async () => {
+              await load();
+              navigate('/classes');
+            }}
+            onLogout={async () => {
+              await mutate('/auth/logout');
+              setUser(null);
+              setCsrf('');
+              navigate('/login');
+            }}
+          />
+        </Suspense>
       ) : (
         <Shell
           user={user}
