@@ -1,0 +1,54 @@
+{
+  "ar": {
+    "duration": 75.167,
+    "revision": "e301801c596f",
+    "chapters": [
+      {
+        "id": "setup",
+        "title": "الأدمن يجهّز الفصل",
+        "start": 8.767
+      },
+      {
+        "id": "publish",
+        "title": "المعلم ينشر الواجب",
+        "start": 22.167
+      },
+      {
+        "id": "submit",
+        "title": "الطالب يسلّم الحل",
+        "start": 36.2
+      },
+      {
+        "id": "return",
+        "title": "النتيجة ترجع للطالب",
+        "start": 48.367
+      }
+    ]
+  },
+  "en": {
+    "duration": 67.533,
+    "revision": "b8618bdb4305",
+    "chapters": [
+      {
+        "id": "setup",
+        "title": "The administrator connects the class",
+        "start": 8.233
+      },
+      {
+        "id": "publish",
+        "title": "The teacher publishes the assignment",
+        "start": 20.333
+      },
+      {
+        "id": "submit",
+        "title": "The student submits an answer",
+        "start": 32.767
+      },
+      {
+        "id": "return",
+        "title": "The result reaches the student",
+        "start": 44.433
+      }
+    ]
+  }
+}

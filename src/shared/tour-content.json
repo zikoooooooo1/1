@@ -1,0 +1,262 @@
+{
+  "ar": {
+    "voice": "ar-EG-ShakirNeural",
+    "ui": {
+      "illustration": "مشاهد توضيحية · دون بيانات حقيقية",
+      "journey": "من الفصل إلى النتيجة",
+      "class": "الرياضيات · الصف العاشر",
+      "assignment": "المعادلات الخطية",
+      "admin": "الأدمن",
+      "teacher": "المعلم",
+      "student": "الطالب",
+      "class_tab": "الفصل",
+      "work_tab": "الواجبات",
+      "results_tab": "النتائج",
+      "subject_label": "المادة والصف",
+      "teacher_label": "المعلم المسؤول",
+      "students_label": "الطلاب المسجّلون",
+      "assigned": "تم توزيع المعلم",
+      "enrolled": "تم إلحاق الطلاب",
+      "connect": "حفظ الفصل",
+      "connected": "الفصل جاهز للعمل",
+      "instructions": "حل المعادلة، ثم اكتب خطوات الحل.",
+      "equation": "2x + 4 = 12",
+      "solution": "2x = 8    →    x = 4",
+      "draft": "مسودة",
+      "published": "منشور",
+      "publish": "نشر الواجب",
+      "available": "ظهر الواجب في مساحة الطالب",
+      "answer_label": "إجابتك",
+      "submit": "تسليم الواجب",
+      "submitted": "تم التسليم",
+      "received": "وصل العمل إلى المعلم",
+      "review": "مراجعة التسليم",
+      "feedback_label": "ملاحظات المعلم",
+      "feedback": "خطوات الحل واضحة والنتيجة صحيحة.",
+      "return": "إرجاع النتيجة",
+      "returned": "تم إرجاع النتيجة",
+      "result_notice": "النتيجة متاحة للطالب",
+      "same_work": "نفس الفصل. نفس الواجب. رحلة واحدة.",
+      "brand_line": "مدرسة واحدة. نظام واحد.",
+      "intro_line": "كيف يتحوّل واجب إلى نتيجة؟",
+      "intro_sub": "تابع خطوة واحدة، عبر ثلاث مساحات عمل.",
+      "outro_line": "كل خطوة تصل إلى الشخص المناسب.",
+      "saved": "محفوظ",
+      "new_work": "واجب جديد",
+      "next": "المطلوب منك الآن",
+      "setup_title": "تجهيز الفصل",
+      "publish_title": "نشر الواجب",
+      "submit_title": "تسليم العمل",
+      "return_title": "إرجاع النتيجة",
+      "students_pending": "اختيار الطلاب"
+    },
+    "scenes": [
+      {
+        "id": "intro",
+        "title": "رحلة واجب واحد",
+        "beats": [
+          {
+            "cue": "intro",
+            "narration": "خلّينا نشوف كلاسو في موقف واضح: واجب واحد، من تجهيز الفصل لحد وصول النتيجة للطالب."
+          }
+        ]
+      },
+      {
+        "id": "setup",
+        "title": "الأدمن يجهّز الفصل",
+        "beats": [
+          {
+            "cue": "setup",
+            "narration": "الأدمن يجهّز فصل الرياضيات، ويحدّد المعلم المسؤول عنه."
+          },
+          {
+            "cue": "connect",
+            "narration": "يلحق الطلاب بالفصل ويحفظه. دلوقتي كل شخص عنده مساحة للعمل."
+          }
+        ]
+      },
+      {
+        "id": "publish",
+        "title": "المعلم ينشر الواجب",
+        "beats": [
+          {
+            "cue": "draft",
+            "narration": "من نفس الفصل، المعلم يكتب واجب المعادلات الخطية، ويحدّد المطلوب."
+          },
+          {
+            "cue": "publish",
+            "narration": "يضغط نشر. فيظهر نفس الواجب للطلاب المسجّلين في الفصل."
+          }
+        ]
+      },
+      {
+        "id": "submit",
+        "title": "الطالب يسلّم الحل",
+        "beats": [
+          {
+            "cue": "answer",
+            "narration": "الطالب يفتح الواجب، ويكتب الحل وخطواته."
+          },
+          {
+            "cue": "submit",
+            "narration": "يضغط تسليم. يتحوّل العمل إلى تسليم يقدر المعلم يراجعه."
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "title": "النتيجة ترجع للطالب",
+        "beats": [
+          {
+            "cue": "review",
+            "narration": "المعلم يراجع الحل، ويكتب ملاحظاته، ثم يرجع النتيجة."
+          },
+          {
+            "cue": "result",
+            "narration": "الطالب يشوف النتيجة المنشورة وملاحظات المعلم. نفس الواجب، من البداية للنهاية."
+          }
+        ]
+      },
+      {
+        "id": "outro",
+        "title": "كل التفاصيل متصلة",
+        "beats": [
+          {
+            "cue": "outro",
+            "narration": "دي كلاسو. خطوات مترابطة، وصلاحيات واضحة. مدرسة واحدة. نظام واحد."
+          }
+        ]
+      }
+    ]
+  },
+  "en": {
+    "voice": "en-US-GuyNeural",
+    "ui": {
+      "illustration": "Illustrative workflow · No real school data",
+      "journey": "From class to result",
+      "class": "Mathematics · Grade 10",
+      "assignment": "Linear equations",
+      "admin": "Administrator",
+      "teacher": "Teacher",
+      "student": "Student",
+      "class_tab": "Class",
+      "work_tab": "Assignments",
+      "results_tab": "Results",
+      "subject_label": "Subject and grade",
+      "teacher_label": "Assigned teacher",
+      "students_label": "Enrolled students",
+      "assigned": "Teacher assigned",
+      "enrolled": "Students enrolled",
+      "connect": "Save class",
+      "connected": "The class is ready",
+      "instructions": "Solve the equation. Show each step.",
+      "equation": "2x + 4 = 12",
+      "solution": "2x = 8    →    x = 4",
+      "draft": "Draft",
+      "published": "Published",
+      "publish": "Publish assignment",
+      "available": "Now visible in the student workspace",
+      "answer_label": "Your answer",
+      "submit": "Submit assignment",
+      "submitted": "Submitted",
+      "received": "Ready for the teacher to review",
+      "review": "Review submission",
+      "feedback_label": "Teacher feedback",
+      "feedback": "Clear steps and a correct solution.",
+      "return": "Return result",
+      "returned": "Result returned",
+      "result_notice": "The student can now view the result",
+      "same_work": "One class. One assignment. One connected journey.",
+      "brand_line": "One School. One System.",
+      "intro_line": "How does work become a result?",
+      "intro_sub": "Follow one assignment through three workspaces.",
+      "outro_line": "Every step reaches the right person.",
+      "saved": "Saved",
+      "new_work": "New assignment",
+      "next": "Your next task",
+      "setup_title": "Set up the class",
+      "publish_title": "Publish the work",
+      "submit_title": "Submit an answer",
+      "return_title": "Return the result",
+      "students_pending": "Select students"
+    },
+    "scenes": [
+      {
+        "id": "intro",
+        "title": "One connected workflow",
+        "beats": [
+          {
+            "cue": "intro",
+            "narration": "Let’s see Claso through one clear example. Follow an assignment from setting up a class to returning a result."
+          }
+        ]
+      },
+      {
+        "id": "setup",
+        "title": "The administrator connects the class",
+        "beats": [
+          {
+            "cue": "setup",
+            "narration": "The administrator sets up the mathematics class and assigns its teacher."
+          },
+          {
+            "cue": "connect",
+            "narration": "Students are enrolled and the class is saved. Everyone now has a place to work."
+          }
+        ]
+      },
+      {
+        "id": "publish",
+        "title": "The teacher publishes the assignment",
+        "beats": [
+          {
+            "cue": "draft",
+            "narration": "Inside the same class, the teacher prepares a linear equations assignment with clear instructions."
+          },
+          {
+            "cue": "publish",
+            "narration": "Select publish, and that assignment appears for the students enrolled in the class."
+          }
+        ]
+      },
+      {
+        "id": "submit",
+        "title": "The student submits an answer",
+        "beats": [
+          {
+            "cue": "answer",
+            "narration": "The student opens the assignment and writes a solution, showing each step."
+          },
+          {
+            "cue": "submit",
+            "narration": "Select submit. The work is now a submission for the teacher to review."
+          }
+        ]
+      },
+      {
+        "id": "return",
+        "title": "The result reaches the student",
+        "beats": [
+          {
+            "cue": "review",
+            "narration": "The teacher reviews the solution, adds feedback, and returns the result."
+          },
+          {
+            "cue": "result",
+            "narration": "The student can now read the published result and teacher feedback. The same assignment, from start to finish."
+          }
+        ]
+      },
+      {
+        "id": "outro",
+        "title": "Every step stays connected",
+        "beats": [
+          {
+            "cue": "outro",
+            "narration": "This is Claso. Connected steps, with clear permissions. One School. One System."
+          }
+        ]
+      }
+    ]
+  }
+}
